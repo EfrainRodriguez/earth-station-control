@@ -1,0 +1,149 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  color: #58c4dc;
+  background-color: #1b1c26;
+}
+
+.header {
+  display: flex;
+  padding: 12px;
+  align-items: center;
+}
+
+.title-container {
+  margin-left: 16px;
+}
+
+.title-container h1 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.title-container h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.logo-container img {
+  width: 60px;
+  height: auto;
+}
+
+.main-content {
+  gap: 24px;
+  padding: 0px 20px 20px;
+  display: flex;
+  font-size: 14px;
+  flex-direction: column;
+}
+
+.section {
+  gap: 20px;
+  padding: 16px;
+  display: flex;
+  position: relative;
+  border-radius: 16px;
+  border: 0.5px dashed #58c4dc;
+}
+
+.section-label {
+  top: -10px;
+  left: 10px;
+  font-size: 14px;
+  padding: 0px 8px;
+  background-color: #1b1c26;
+  position: absolute;
+}
+
+.select-label {
+  margin-right: 8px;
+}
+
+.caption-label {
+  font-size: 12px;
+  margin: 4px 0px 0px;
+}
+
+.error {
+  color: #ff0000;
+}
+
+.success {
+  color: #00ff00;
+}
+
+.styled-select {
+  padding: 8px;
+  outline: none;
+  cursor: pointer;
+  min-width: 200px;
+  color: #58c4dc;
+  border-radius: 5px;
+  border: 1px solid #58c4dc;
+  background-color: transparent;
+  transition: #58c4dc 0.3s, color 0.3s;
+}
+
+.styled-select:hover {
+  color: white;
+  background-color: #00414f;
+}
+
+.button {
+  padding: 8px;
+  outline: none;
+  cursor: pointer;
+  color: #58c4dc;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  border: 1px solid #58c4dc;
+  background-color: transparent;
+  transition: #58c4dc 0.3s, color 0.3s;
+}
+
+.button:hover {
+  background-color: #00414f;
+}
+
+.button .icon {
+  width: 18px;
+  height: auto;
+}
+
+.control-container {
+  gap: 16px;
+  width: 100%;
+  display: flex;
+}
+
+.control-container > div {
+  flex-basis: 50%;
+}
+
+.control-input {
+  padding: 8px;
+  outline: none;
+  font-size: 16px;
+  color: #58c4dc;
+  border-radius: 5px;
+  border: 1px solid #58c4dc;
+  background-color: transparent;
+  transition: #58c4dc 0.3s, color 0.3s;
+}
+
+.emergency {
+  color: #ff0000;
+  font-weight: bold;
+  border: 1px solid #ff0000;
+}
+
+.emergency:hover {
+  background-color: #2a0505;
+}

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estación Satelital Terrena</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo-container">
+        <img
+          src="./public/escudounipamplona.png"
+          alt="Logo de la Universidad de Pamplona"
+        />
+      </div>
+      <div class="title-container">
+        <h1>Estación Satelital Terrena</h1>
+        <h2>Universidad de Pamplona</h2>
+      </div>
+    </header>
+    <main class="main-content">
+      <section class="section">
+        <div class="section-label">Comunicación serial</div>
+        <div>
+          <div>
+            <label class="select-label" for="com-ports"
+              >Seleccione el puerto COM:</label
+            >
+            <div style="display: flex">
+              <select id="com-ports" class="styled-select">
+                <!-- options -->
+              </select>
+              <button
+                id="disconnect"
+                class="button"
+                style="margin-left: 4px; display: none; padding: 4px"
+              >
+                <img
+                  class="icon"
+                  src="./public/close.svg"
+                  alt="home"
+                  width="10px"
+                  height="10px"
+                />
+              </button>
+            </div>
+          </div>
+          <p id="port-caption" class="caption-label"></p>
+        </div>
+        <div>
+          <div>
+            <label class="select-label" for="com-ports"
+              >Seleccione el baudrate:</label
+            >
+            <select id="baudrate" class="styled-select">
+              <option value="115200">115200</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Control section -->
+
+      <section
+        id="control-section"
+        class="section"
+        style="padding-bottom: 8px; display: none"
+      >
+        <div class="section-label">Control de posición</div>
+        <div class="control-container">
+          <!-- manual -->
+          <div class="control-manual">
+            <section class="section" style="margin-bottom: 16px">
+              <div class="section-label">Base</div>
+              <button id="home-base" class="button">
+                <img class="icon" src="./public/home.svg" alt="home" />
+              </button>
+              <input
+                id="base-input"
+                class="control-input"
+                type="number"
+                min="0"
+                max="360"
+                placeholder="° ángulo"
+              />
+              <button id="pos-base" class="button">
+                <img class="icon" src="./public/arrow-right.svg" alt="home" />
+              </button>
+            </section>
+
+            <section class="section" style="margin-bottom: 16px">
+              <div class="section-label">Antena</div>
+              <button id="home-antenna" class="button">
+                <img class="icon" src="./public/home.svg" alt="home" />
+              </button>
+              <input
+                id="antenna-input"
+                class="control-input"
+                type="number"
+                min="0"
+                max="360"
+                placeholder="° ángulo"
+              />
+              <button id="pos-antenna" class="button">
+                <img class="icon" src="./public/arrow-right.svg" alt="home" />
+              </button>
+            </section>
+
+            <div style="display: flex; gap: 8px">
+              <button id="home-all" class="button">
+                <img class="icon" src="./public/home.svg" alt="home" />
+                <span style="margin-left: 8px; margin-top: 4px">Origen</span>
+              </button>
+              <button id="stop" class="button emergency">
+                <img class="icon" src="./public/power-off.svg" alt="home" />
+                <span style="margin-left: 8px; margin-top: 4px"
+                  >Emergencia</span
+                >
+              </button>
+            </div>
+          </div>
+
+          <!-- automatic -->
+          <section
+            class="section"
+            style="margin-bottom: 8px; display: block; width: 100%"
+          >
+            <div class="section-label">Trayectoria</div>
+            <div style="display: flex; gap: 8px; margin-bottom: 4px">
+              <input
+                id="elevation"
+                class="control-input"
+                style="width: 100%"
+                type="number"
+                min="0"
+                max="360"
+                placeholder="Elevación (°)"
+              />
+            </div>
+            <div style="display: flex; gap: 8px; margin-bottom: 4px">
+              <input
+                id="initial-azimuth"
+                class="control-input"
+                style="width: 100%"
+                type="number"
+                min="0"
+                max="360"
+                placeholder="Azimut inicial (°)"
+              />
+            </div>
+            <div style="display: flex; gap: 8px; margin-bottom: 4px">
+              <input
+                id="final-azimuth"
+                class="control-input"
+                style="width: 100%"
+                type="number"
+                min="0"
+                max="360"
+                placeholder="Azimut final (°)"
+              />
+            </div>
+            <div style="display: flex; gap: 8px; margin-bottom: 4px">
+              <input
+                id="time"
+                class="control-input"
+                style="width: 100%"
+                type="number"
+                min="0"
+                placeholder="Tiempo (mtos.)"
+              />
+            </div>
+            <button id="start-path" class="button" style="width: 100%">
+              <img class="icon" src="./public/play.svg" alt="home" />
+              <span style="margin-left: 8px; margin-top: 4px"
+                >Iniciar trayectoria</span
+              >
+            </button>
+            <p id="path-caption" class="caption-label error"></p>
+          </section>
+        </div>
+      </section>
+    </main>
+    <script src="./renderer.js"></script>
+  </body>
+</html>
