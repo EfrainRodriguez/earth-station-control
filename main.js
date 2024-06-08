@@ -13,6 +13,8 @@ function createWindow() {
     minHeight: 600,
     maxHeight: 600,
     maximizable: false,
+    darkTheme: true,
+    backgroundColor: "#1b1c26",
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
