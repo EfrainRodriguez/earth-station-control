@@ -4,6 +4,7 @@
   "description": "This Electron application allows you to connect to a serial port and send commands to a satellite earth station.",
   "main": "main.js",
   "scripts": {
+    "dev": "electron .",
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make"

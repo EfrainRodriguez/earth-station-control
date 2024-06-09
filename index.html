@@ -129,13 +129,24 @@
             <div class="section-label">Trayectoria</div>
             <div style="display: flex; gap: 8px; margin-bottom: 4px">
               <input
-                id="elevation"
+                id="initial-elevation"
                 class="control-input"
                 style="width: 100%"
                 type="number"
                 min="0"
                 max="360"
-                placeholder="Elevación (°)"
+                placeholder="Elevación inicial (°)"
+              />
+            </div>
+            <div style="display: flex; gap: 8px; margin-bottom: 4px">
+              <input
+                id="final-elevation"
+                class="control-input"
+                style="width: 100%"
+                type="number"
+                min="0"
+                max="360"
+                placeholder="Elevación final (°)"
               />
             </div>
             <div style="display: flex; gap: 8px; margin-bottom: 4px">
@@ -145,7 +156,7 @@
                 style="width: 100%"
                 type="number"
                 min="0"
-                max="360"
+                max="300"
                 placeholder="Azimut inicial (°)"
               />
             </div>
@@ -156,7 +167,7 @@
                 style="width: 100%"
                 type="number"
                 min="0"
-                max="360"
+                max="300"
                 placeholder="Azimut final (°)"
               />
             </div>

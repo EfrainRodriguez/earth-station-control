@@ -3,6 +3,16 @@ const { SerialPort } = require("serialport");
 let port = null;
 const portCaptionElement = document.getElementById("port-caption");
 
+function calculateElevation(elevation) {
+  const elevationOffset = 180;
+  return elevationOffset - elevation;
+}
+
+function calculateAzimuth(azimuth) {
+  const azimuthOffset = 0;
+  return azimuthOffset + azimuth;
+}
+
 async function listSerialPorts() {
   await SerialPort.list().then((ports, err) => {
     if (err) {
@@ -145,7 +155,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const basePosition = document.getElementById("base-input");
 
       if (basePosition?.value) {
-        port.write(`G1 X${basePosition.value} F150;\n`);
+        const azimuth = calculateAzimuth(parseFloat(basePosition.value));
+        port.write(`G1 X${azimuth} F250;\n`);
         basePosition.value = "";
       }
     }
@@ -158,7 +169,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const antennaPosition = document.getElementById("antenna-input");
 
       if (antennaPosition?.value) {
-        port.write(`G1 Y${antennaPosition.value} F150;\n`);
+        const elevation = calculateElevation(antennaPosition.value);
+        port.write(`G1 Y${elevation} F250;\n`);
         antennaPosition.value = "";
       }
     }
@@ -192,16 +204,23 @@ document.addEventListener("DOMContentLoaded", () => {
   const sendButton = document.getElementById("start-path");
   sendButton.addEventListener("click", () => {
     if (port) {
-      const elevationEl = document.getElementById("elevation");
+      const initialElevationEl = document.getElementById("initial-elevation");
+      const finalElevationEl = document.getElementById("final-elevation");
       const initialAzEl = document.getElementById("initial-azimuth");
       const finalAzEl = document.getElementById("final-azimuth");
       const timeEl = document.getElementById("time");
 
       const pathCaptionEl = document.getElementById("path-caption");
 
-      if (!elevationEl?.value) {
-        pathCaptionEl.textContent = "Elevación requerida";
-        elevationEl.focus();
+      if (!initialElevationEl?.value) {
+        pathCaptionEl.textContent = "Elevación inicial requerida";
+        initialElevationEl.focus();
+        return;
+      }
+
+      if (!finalElevationEl?.value) {
+        pathCaptionEl.textContent = "Elevación final requerida";
+        finalElevationEl.focus();
         return;
       }
 
@@ -223,26 +242,35 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const elevation = parseFloat(elevationEl.value);
-      const initialAz = parseFloat(initialAzEl.value);
-      const finalAz = parseFloat(finalAzEl.value);
+      const initialElevation = calculateElevation(
+        parseFloat(initialElevationEl.value)
+      );
+      const finalElevation = calculateElevation(
+        parseFloat(finalElevationEl.value)
+      );
+
+      const initialAz = calculateAzimuth(parseFloat(initialAzEl.value));
+      const finalAz = calculateAzimuth(parseFloat(finalAzEl.value));
+
       const time = parseFloat(timeEl.value);
 
-      const azimuthOffset = 90;
-      const finalAzWithOffset = azimuthOffset + finalAz;
-      const initialAzWithOffset = azimuthOffset + initialAz;
+      const deltaElevation = Math.abs(finalElevation - initialElevation);
+      const deltaAzimuth = Math.abs(finalAz - initialAz);
 
-      const azimuthDistance = Math.abs(finalAzWithOffset - initialAzWithOffset);
+      const elevationSpeed = deltaElevation / time;
+      const azimuthSpeed = deltaAzimuth / time;
 
-      const azimuthSpeed = azimuthDistance / time;
-
-      port.write(
-        `G01 X${finalAzWithOffset + finalAz} Y${elevation} F${azimuthSpeed};\n`
+      // calculate angular speed
+      const vel = Math.sqrt(
+        Math.pow(elevationSpeed, 2) + Math.pow(azimuthSpeed, 2)
       );
+
+      port.write(`G01 X${finalAz} Y${finalElevation} F${vel};\n`);
 
       pathCaptionEl.textContent = "Enviando trayectoria...";
 
-      elevationEl.value = "";
+      initialElevationEl.value = "";
+      finalElevationEl.value = "";
       initialAzEl.value = "";
       finalAzEl.value = "";
       timeEl.value = "";
