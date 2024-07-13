@@ -9,8 +9,11 @@ function calculateElevation(elevation) {
 }
 
 function calculateAzimuth(azimuth) {
-  const azimuthOffset = 0;
-  return azimuthOffset + azimuth;
+  const azimuthOffset = 180;
+  if (azimuth > 180) {
+    return (360 - azimuth) + azimuthOffset;
+  }
+  return azimuthOffset - azimuth;
 }
 
 async function listSerialPorts() {
@@ -204,25 +207,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const sendButton = document.getElementById("start-path");
   sendButton.addEventListener("click", () => {
     if (port) {
-      const initialElevationEl = document.getElementById("initial-elevation");
-      const finalElevationEl = document.getElementById("final-elevation");
+      const maxElevationEl = document.getElementById("max-elevation");
       const initialAzEl = document.getElementById("initial-azimuth");
       const finalAzEl = document.getElementById("final-azimuth");
       const timeEl = document.getElementById("time");
 
       const pathCaptionEl = document.getElementById("path-caption");
 
-      if (!initialElevationEl?.value) {
-        pathCaptionEl.textContent = "Elevación inicial requerida";
-        initialElevationEl.focus();
+      if (!maxElevationEl?.value) {
+        pathCaptionEl.textContent = "Elevación máxima requerida";
+        maxElevationEl.focus();
         return;
       }
 
-      if (!finalElevationEl?.value) {
-        pathCaptionEl.textContent = "Elevación final requerida";
-        finalElevationEl.focus();
-        return;
-      }
+      // if (!directionEl?.value) {
+      //   pathCaptionEl.textContent = "La dirección es requerida";
+      //   directionEl.focus();
+      //   return;
+      // }
 
       if (!initialAzEl?.value) {
         pathCaptionEl.textContent = "Azimut inicial requerido";
@@ -242,35 +244,47 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      const initialElevation = calculateElevation(
-        parseFloat(initialElevationEl.value)
-      );
-      const finalElevation = calculateElevation(
-        parseFloat(finalElevationEl.value)
-      );
+      if (timeEl.value <= 0) {
+        pathCaptionEl.textContent = "El tiempo debe ser mayor a 0";
+        timeEl.focus();
+        return;
+      }
+
+      const maxElevation = calculateElevation(parseFloat(maxElevationEl.value));
+      // const finalElevation = calculateElevation(
+      //   parseFloat(finalElevationEl.value)
+      // );
 
       const initialAz = calculateAzimuth(parseFloat(initialAzEl.value));
       const finalAz = calculateAzimuth(parseFloat(finalAzEl.value));
 
       const time = parseFloat(timeEl.value);
-
-      const deltaElevation = Math.abs(finalElevation - initialElevation);
       const deltaAzimuth = Math.abs(finalAz - initialAz);
 
-      const elevationSpeed = deltaElevation / time;
-      const azimuthSpeed = deltaAzimuth / time;
+      const azDirection = finalAz < initialAz ? -1 : 1;
 
-      // calculate angular speed
+      const time2 = time / 2;
+      const azimuth2 = deltaAzimuth / 2;
+      const elevation2 = Math.abs(maxElevation - calculateElevation(0));
+
+      const elevationSpeed = elevation2 / time2;
+      const azimuthSpeed = azimuth2 / time2;
+
       const vel = Math.sqrt(
         Math.pow(elevationSpeed, 2) + Math.pow(azimuthSpeed, 2)
       );
 
-      port.write(`G01 X${finalAz} Y${finalElevation} F${vel};\n`);
+      port.write(
+        `G01 X${
+          initialAz + azimuth2 * azDirection
+        } Y${maxElevation} F${vel};\n`
+      );
+      port.write(`G01 X${finalAz} Y${calculateElevation(0)};\n`);
 
       pathCaptionEl.textContent = "Enviando trayectoria...";
 
-      initialElevationEl.value = "";
-      finalElevationEl.value = "";
+      maxElevationEl.value = "";
+      // finalElevationEl.value = "";
       initialAzEl.value = "";
       finalAzEl.value = "";
       timeEl.value = "";
